@@ -1,0 +1,35 @@
+{% load static %}
+
+<h3>My Cart</h3>
+<button class="checkout-btn">PROCEED TO CHEKOUT</button>
+<div id="my-cart">
+    {% if cart and cart.bookincart_set.all%}
+    {% for book in cart.bookincart_set.all%}
+    <div class="book-item-cart">
+        <div class="book-cover-cart"><img src="{% static 'bookstore/images/'|add:book.book.image%}" alt="">
+        </div>
+        <div class="book-item-body-cart">
+            <p class="book-title-cart">{{book.book.title}}</p>
+            <div class="book-info"><span>QUANTITY: {{book.quantity}}</span>
+                <div class="quan-buttons">
+                    <button onclick="updateCart('increase', '{{book.book.pk}}' )" name="increase"
+                        value="{{book.book.pk}}" class="inc-button">+</button>
+                    <button onclick="updateCart('decrease', '{{book.book.pk}}' )" name="decrease"
+                        value="{{book.book.pk}}" class="dec-button">-</button>
+                </div>
+                <button onclick="updateCart('delete', '{{book.book.pk}}' )" name="delete" value="{{book.book.pk}}"
+                    class="delete-button">X</button>
+                <span>{{book.book.price}}</span>
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+    {% else %}
+    <p>There's nothing here</p>
+
+    {% endif%}
+
+
+</div>
+<p class="price-total">Total: {% if cart %}{{cart.price_total}}{%else%}0{%endif%}€</p>

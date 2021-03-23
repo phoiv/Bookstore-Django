@@ -1,0 +1,28 @@
+{% extends "bookstore/base.html" %}
+{% block content%}
+{% load static %}
+<div class="back-image">
+    <h2>your neighboorhood<br>bookstore</h2>
+</div>
+
+
+<div class="main-content">
+    {% for item in gridData %}
+    <div class="grid-duo">
+        <div class="text-area">
+            <h3>{{item.title}}</h3>
+            {{item.content|safe}}
+        </div>
+        <div class="img-area">
+            <img src="{% static 'bookstore/images/'|add:item.img%}" alt="an image was here" />
+        </div>
+    </div>
+
+    {% endfor %}
+</div>
+
+
+<!-- <a href="#" class="scroll-to-top"><i class='far fa-arrow-alt-circle-up'></i></a> -->
+
+
+{%endblock content%}

@@ -1,0 +1,139 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ request.path|slugify }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Syne+Mono&family=Syne+Tactile&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{%static 'bookstore/css/main.css'%}">
+
+    <link rel="stylesheet" type="text/css"
+        href="{%with url=request.path|slugify%}{%static 'bookstore/css/'|add:url|add:'.css'%}{% endwith %}">
+
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+    </script>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo-wrap">
+            <a href="#">
+                <p>my<span>BOOKSTORE</span></p>
+            </a>
+        </div>
+
+        <!-- toggles the mobile-nav-menu -->
+        <!-- <input type="checkbox" id="chk" name="toggler"> -->
+        <div class="toggler">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+
+
+        <ul id="nav-menu" class="close">
+            <li class="nav-link {%if request.path|slugify == 'home'%}active{% endif %}"><a
+                    href="{%url 'book-home'%}">Home</a></li>
+            <li class="nav-link {%if request.path|slugify == 'products'%}active{% endif %}"><a
+                    href="{%url 'book-products'%}">Products</a></li>
+            <li class="nav-link {%if request.path|slugify == 'about'%}active{% endif %}"><a
+                    href="{%url 'book-about'%}">About</a></li>
+            <li class="nav-link {%if request.path|slugify == 'contact'%}active{% endif %}"><a
+                    href="{%url 'book-contact'%}">Contact</a></li>
+        </ul>
+
+        <div class="acc_cart">
+            {% if user.is_authenticated%}
+            <div class="account"><a href="{%url 'logout'%}">Logout</a></div>
+            {% else %}
+            <div class="account"><a href="{%url 'register'%}">Sign in/Join</a></div>
+            {% endif %}
+            <div class="cart-icon">
+                <i class="material-icons">add_shopping_cart</i>
+                <div class="cart-count">
+                    <span>{{quantity}}</span>
+                    <span>cart</span>
+                </div>
+            </div>
+        </div>
+
+    </header>
+
+    <!-- {% if messages %}
+    {% for message in messages%}
+    <div>{{message}}</div>
+    {% endfor %}
+    {% endif%} -->
+
+    {%block content%}
+    {%endblock%}
+
+
+
+    <div id="my-cart-overlay">
+        {{cart_template}}
+        <!-- <h3>My Cart</h3>
+        <button class="checkout-btn">PROCEED TO CHEKOUT</button>
+        <div id="my-cart">
+            {% if cart%}
+            {% for book in cart.bookincart_set.all%}
+            <div class="book-item-cart">
+                <div class="book-cover-cart"><img src="{% static 'bookstore/images/'|add:book.book.image%}" alt="">
+                </div>
+                <div class="book-item-body-cart">
+                    <p class="book-title-cart">{{book.book.title}}</p>
+                    <div class="book-info"><span>QUANTITY: {{book.quantity}}</span>
+                        <div class="quan-buttons">
+                            <button name="increase" value="{{book.book.pk}}" class="inc-button">+</button>
+                            <button name="decrease" value="{{book.book.pk}}" class="dec-button">-</button>
+                        </div>
+                        <button name="delete" value="{{book.book.pk}}" class="delete-button">X</button>
+                        <span>{{book.book.price}}</span>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+            {% else %}
+            <p>There's nothing here</p>
+
+            {% endif%}
+
+
+        </div>
+        <p class="price-total">Total: {% if cart %}{{cart.price_total}}{%else%}0{%endif%}€</p> -->
+    </div>
+
+    <div class="content-overlay"></div>
+    <script src="{% static 'bookstore/scripts/scripts.js' %}"></script>
+</body>
+
+</html>

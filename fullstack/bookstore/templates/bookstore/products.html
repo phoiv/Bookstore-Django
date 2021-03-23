@@ -1,0 +1,44 @@
+{% extends "bookstore/base.html" %}
+{% block content%}
+{% load static %}
+
+<div class="content">
+    <h1>Our Book Selection</h1>
+    <form class="book-grid" method="POST">
+        {%csrf_token%}
+        {%if books%}
+        {% for book in books%}
+        <div class="book-item">
+            <p class="book-title">{{book.title}}</p>
+            <div class="book-item-body">
+                <div class="book-cover">
+                    <img src="{% static 'bookstore/images/'|add:book.image%}" alt="got">
+                </div>
+                <div class="book-details">
+                    <p class="book-description">{{book.description}}</p>
+                    <p class="book-quote">{{book.quote}}</p>
+                    <p class="price-buy"><span class="price">{{book.price}}</span>
+                        {% if book.stock < 5 %} <span class="warning">
+                            {% if book.stock == 0%}
+                            Out of stock
+                            {% else %}
+                            {{book.stock}} left
+                            {% endif %}
+                            </span>
+                            {% endif %}
+                            <button class="{% if book.stock == 0 %}disabled{% endif %}" name="add"
+                                value="{{book.pk}}">add
+                                to cart</button>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+        {%endfor%}
+        {%endif%}
+
+
+    </form>
+</div>
+
+{%endblock content%}
